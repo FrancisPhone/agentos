@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { Navigation } from "../components/Navigation";
 import { Footer } from "../components/Footer";
-import AgentOSPage, { FILESYSTEM_CODE } from "../components/marketing/solutions/AgentOSPage";
+import AgentOSPage, { APPS_CODE, FILESYSTEM_CODE } from "../components/marketing/solutions/AgentOSPage";
 import { highlightCodeHtml } from "../lib/highlight-code";
 
 const heroTabSnippets = [
@@ -233,14 +233,15 @@ const heroTabs = await Promise.all(
 	})),
 );
 const filesystemHighlightedCode = await highlightCodeHtml(FILESYSTEM_CODE, 'ts');
+const appsHighlightedCode = await highlightCodeHtml(APPS_CODE, 'ts');
 ---
 
 <Layout
   title="agentOS — Virtual operating system for agents"
-  description="A virtual operating system for agents, with filesystem, execution, and orchestration in one lightweight library."
+  description="A virtual operating system for agents, with execution, filesystem, orchestration, and apps in one lightweight library."
   ogImage="https://agentos-sdk.dev/og.png"
 >
   <Navigation revealLogoOnScroll client:load />
-  <AgentOSPage heroTabs={heroTabs} filesystemHighlightedCode={filesystemHighlightedCode} client:load />
+  <AgentOSPage heroTabs={heroTabs} filesystemHighlightedCode={filesystemHighlightedCode} appsHighlightedCode={appsHighlightedCode} client:load />
   <Footer client:visible />
 </Layout>
