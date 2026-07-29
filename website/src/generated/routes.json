@@ -60,6 +60,10 @@
       "title": "Introduction",
       "description": "Run coding agents inside isolated VMs with full filesystem, process, and network control."
     },
+    "/docs/docs/inspector": {
+      "title": "Inspector",
+      "description": "Watch and drive a live VM from the Rivet dashboard: transcript, filesystem, and system tabs."
+    },
     "/docs/docs/javascript-compatibility": {
       "title": "Node.js Compatibility",
       "description": "Node.js builtins available to JavaScript running inside AgentOS."
