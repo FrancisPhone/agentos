@@ -56,6 +56,24 @@ npm install @rivet-dev/agentos-sandbox sandbox-agent
 <CodeSnippet file="examples/sandbox/server.ts" />
 </CodeGroup>
 
+## Configuration
+
+The sandbox is mounted at `/mnt/sandbox` by default. The `sandbox` object also
+accepts these options alongside `provider` or `client`:
+
+| Option | Purpose |
+| --- | --- |
+| `mountPath` | Changes the directory where the external filesystem appears inside the agentOS VM. |
+| `sandboxRoot` | Restricts the mount to a directory inside the external sandbox instead of exposing its root. |
+| `readOnly` | Prevents the VM from modifying files through the mount. Defaults to `false`. |
+| `timeoutMs` | Sets the per-request timeout for Sandbox Agent filesystem calls. |
+| `maxFullReadBytes` | Bounds files buffered by full-read and truncate fallbacks. |
+
+The server example above changes `mountPath` to
+`/home/agentos/sandbox`. Paths used inside the external sandbox remain relative
+to `sandboxRoot`, so a VM file such as `/home/agentos/sandbox/app/index.ts` maps
+to `/app/index.ts` when `sandboxRoot` is `/`.
+
 ## Calling the mounted bindings
 
 Write code through the filesystem, run it inside the sandbox. Bindings are a CLI
@@ -88,6 +106,33 @@ agentos-sandbox send-input --id "proc_abc123" --data "yes"
 
 ## Sandbox providers
 
-Works with any [Sandbox Agent](https://sandboxagent.dev) provider. See the
-[Sandbox Agent docs](https://sandboxagent.dev) for available providers and
-setup.
+The package provides isolated entrypoints for Docker, local execution, E2B,
+Daytona, Vercel, Cloudflare, Modal, ComputeSDK, and Sprites. Import only the
+provider you use (for example, `@rivet-dev/agentos-sandbox/e2b`) so its optional
+SDK is isolated from the rest of your application. Docker is also exported from
+the package root, as shown above.
+
+Install the provider's SDK when required: `@e2b/code-interpreter` for E2B,
+`@daytonaio/sdk` for Daytona, `@vercel/sandbox` for Vercel,
+`@cloudflare/sandbox` for Cloudflare, `modal` for Modal, `computesdk` for
+ComputeSDK, or `@fly/sprites` for Sprites. Docker and local execution need no
+additional provider SDK.
+
+For another backend, adapt any [Sandbox Agent](https://sandboxagent.dev)
+provider with `sandboxAgentProvider` from `@rivet-dev/agentos-sandbox`. Provider
+mode is the preferred lifecycle: each VM gets a fresh sandbox, and disposal of
+the VM destroys it.
+
+## Advanced: mount an existing client
+
+Standalone `AgentOs.create()` can mount an already-connected,
+Sandbox-Agent-compatible client. Install `sandbox-agent` directly for this
+manual path. The caller owns the client by default; set `dispose` to `true` when
+the client implements disposal, or provide a callback to transfer lifecycle
+ownership to the VM.
+
+<CodeSnippet file="examples/sandbox/existing-client.ts" />
+
+RivetKit `agentOS()` intentionally rejects the `client` form because one client
+cannot be shared safely across actor VMs. Pass a `provider` there so every actor
+VM starts and owns a fresh sandbox.

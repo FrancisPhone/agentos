@@ -116,10 +116,6 @@
       "title": "Resource Limits",
       "description": "Cap per-VM resources, JavaScript CPU/wall-clock time, Python execution, and WASM runtime work so guest code can never exhaust the host."
     },
-    "/docs/docs/sandbox": {
-      "title": "Sandbox Mounting",
-      "description": "Extend agentOS with full sandboxes for heavy workloads like browsers, desktop automation, and compilation."
-    },
     "/docs/docs/sandboxes": {
       "title": "External Sandboxes",
       "description": "Extend agentOS with full sandboxes for heavy workloads like browsers, desktop automation, and compilation."

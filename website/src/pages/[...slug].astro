@@ -47,6 +47,28 @@ export async function getStaticPaths() {
     "docs/benchmarks": "/docs/performance",
     "docs/cost-evaluation": "/docs/performance",
   } as const;
+
+  const docSlugs = new Set(docs.map((entry) => entry.id));
+  for (const [source, destination] of Object.entries(legacyRedirects)) {
+    if (docSlugs.has(source)) {
+      throw new Error(`Redirect source /${source} conflicts with a documentation page`);
+    }
+
+    const visited = new Set([source]);
+    let target = destination.replace(/^\/+|\/+$/g, "");
+    while (target in legacyRedirects) {
+      if (visited.has(target)) {
+        throw new Error(`Redirect cycle detected at /${target}`);
+      }
+      visited.add(target);
+      target = legacyRedirects[target as keyof typeof legacyRedirects].replace(/^\/+|\/+$/g, "");
+    }
+
+    if (!docSlugs.has(target)) {
+      throw new Error(`Redirect destination /${target} is not a documentation page`);
+    }
+  }
+
   return [
     ...docs.map((entry) => ({
       params: { slug: entry.id },
