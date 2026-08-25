@@ -10,8 +10,8 @@
 	},
 	"dependencies": {
 		"@hono/node-server": "^2.0.11",
-		"@rivet-dev/agentos": "workspace:*",
-		"@rivet-dev/agentos-apps": "workspace:*",
+		"@rivet-dev/agentos": "0.2.15",
+		"@rivet-dev/agentos-apps": "0.2.15",
 		"hono": "^4.12.9"
 	},
 	"devDependencies": {
